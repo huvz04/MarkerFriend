@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "io.huvz"
-version = "0.1.0"
+version = "0.1.1"
 
 repositories {
     maven("https://maven.aliyun.com/repository/public")
@@ -15,5 +15,5 @@ repositories {
 }
 
 mirai {
-    jvmTarget = JavaVersion.VERSION_1_8
+    jvmTarget = JavaVersion.VERSION_17
 }

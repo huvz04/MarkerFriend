@@ -1,16 +1,16 @@
 package io.huvz.util
 
 import io.huvz.MarkerFriend
-import net.mamoe.mirai.Bot
 import net.mamoe.mirai.console.command.CommandSender
-import net.mamoe.mirai.console.command.ConsoleCommandSender.bot
 import net.mamoe.mirai.console.command.SimpleCommand
-import net.mamoe.mirai.console.command.descriptor.PermissionIdValueArgumentParser.findGroupOrFail
-import net.mamoe.mirai.contact.*
+import net.mamoe.mirai.contact.ContactList
+import net.mamoe.mirai.contact.NormalMember
+import net.mamoe.mirai.contact.isOperator
+import net.mamoe.mirai.contact.nameCardOrNick
 
-object groupCheck : SimpleCommand(MarkerFriend,"隔壁群友",description = "查询机器人所在的另一个群的相同人数") {
+object groupAll : SimpleCommand(MarkerFriend,"隔壁群友列表",description = "查询机器人所在的另一个群的相同人数") {
     @Handler
-    suspend fun handle(sender:CommandSender,groupid:String)
+    suspend fun handle(sender: CommandSender, groupid:String)
     {
 
         val g2 = sender.subject?.id?.let { sender.bot?.getGroup(it) }
@@ -38,16 +38,18 @@ object groupCheck : SimpleCommand(MarkerFriend,"隔壁群友",description = "查
             for(me in list1 ){
                 //MarkerFriend.logger.info("正在查询群友${me in list1}")
                 if(g1?.contains(me.id) == true && !me.isOperator() && (me.specialTitle.isEmpty()))
-                    {
-                        countSum ++;
-                    }
+                {
+                    countSum ++;
+                    MemberListStr.append("QQ:${me.id}||名称:${me.nameCardOrNick}\n")
+                }
             }
         }
 
 
         sender.subject?.sendMessage(
-            "一共查获你群有${countSum}人在目标群聊${g1.id}中\n" +
-                    "（已过滤管理员和有特殊头衔的群友）"
+            "一共查获你群有${countSum}人在目标群聊中\n" +
+                    "名单公示（已过滤管理员和有特殊头衔的群友）\n"+
+                    MemberListStr
         )
     }
 
